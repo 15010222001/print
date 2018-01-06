@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>修改客户信息|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script>
+$(document).ready(function() {
+	var $outer = $('#client');
+	$('#save').click(function() {
+		var 
+		warehouse_id = $outer.find('.select').eq(0).val(),
+		supplier_id = $outer.find('.select').eq(1).val();
+	
+		if (!tcheck(warehouse_id,'','请选择仓库')) { return false; }
+		if (!tcheck(supplier_id,'','请选择供应商')) { return false; }
+		wintq('正在处理，请稍后...',4,20000,0,'');
+		$('form').submit();
+	});
+	$('#content h3 .goodsAdd').click(function() {
+		popload('新增商品',860,500,"__APP__/Outer/getgoodslist/order_id/<{$result['order_id']}>");
+		addDiv($('#iframe_pop'));
+		popclose();
+	});
+	$('#content #table .tr .edit').click(function(event) {
+		event.preventDefault();
+		var id=$(this).attr('href');
+		if (id=='' || isNaN(id)) {
+			wintq('ID参数不正确',3,1000,1,'');
+			return false;
+		}else {
+			popload('修改商品信息',460,300,'__APP__/Outer/goodsedit/id/'+id);
+			addDiv($('#iframe_pop'));
+			popclose();
+		}
+	});
+	$('#content #table .tr .del').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要删除该数据吗？')) {
+			return false;
+		}
+		var id=$(this).attr('href');
+		if (id=='' || isNaN(id)) {
+			wintq('ID参数不正确',3,1000,1,'');
+			return false;
+		}else {
+			wintq('正在删除，请稍后...',4,20000,0,'');
+			$.ajax({
+				url:'__APP__/Outer/goods_del/',
+				dataType:'json',
+				type:'POST',
+				data:'post=ok&id='+id,
+				success: function(data) {
+					if (data.s=='ok') {
+						wintq('删除成功',1,1500,0,'?');
+					}else {
+						wintq(data.s,3,1500,1,'');
+					}
+				}
+			});
+		}
+	});
+	$('#dely').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要删除选择项吗？')) {
+			return false;
+		}
+		var delid='';
+		for (i=0; i<$('#table .delid').size(); i++) {
+			if (!$('#table .delid').eq(i).attr('checked')==false) {
+				delid=delid+$('#table .delid').eq(i).val()+',';
+			}
+		}
+		if (delid=='') {
+			wintq('请选中后再操作',2,1500,1,'');
+		}else {
+			wintq('正在删除，请稍后...',4,20000,0,'');
+			$.ajax({
+				url:'__APP__/User/in_user_del/',
+				dataType:'JSON',
+				type:'POST',
+				data:'delid='+delid,
+				success: function(data) {
+					if (data.s=='ok') {
+						wintq('删除成功',1,1500,0,'?');
+					}else {
+						wintq(data.s,3,1500,1,'');
+					}
+				}
+			});
+		}
+	});
+	$('#confirm').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要确认该出库单吗？')) {
+			return false;
+		}
+		$.ajax({
+			url:'__APP__/Outer/confirm/',
+			dataType:'JSON',
+			type:'POST',
+			data:"order_id=<{$result['order_id']}>",
+			success: function(data) {
+				if (data.s=='ok') {
+					wintq('确认成功',1,1500,0,'?');
+				}else {
+					wintq(data.s,3,1500,1,'');
+				}
+			}
+		});
+	});
+	$('#unconfirm').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要取消确认该出库单吗？')) {
+			return false;
+		}
+		$.ajax({
+			url:'__APP__/Outer/unconfirm/',
+			dataType:'JSON',
+			type:'POST',
+			data:"order_id=<{$result['order_id']}>",
+			success: function(data) {
+				if (data.s=='ok') {
+					wintq('取消确认成功',1,1500,0,'?');
+				}else {
+					wintq(data.s,3,1500,1,'');
+				}
+			}
+		});
+	});
+	$('#outer').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要出库该出库单吗？')) {
+			return false;
+		}
+		$.ajax({
+			url:'__APP__/Outer/outer/',
+			dataType:'JSON',
+			type:'POST',
+			data:"order_id=<{$result['order_id']}>",
+			success: function(data) {
+				if (data.s=='ok') {
+					wintq('出库成功',1,1500,0,'?');
+				}else {
+					wintq(data.s,3,1500,1,'');
+				}
+			}
+		});
+	});
+	$('#complete').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要完成该出库单吗？')) {
+			return false;
+		}
+		$.ajax({
+			url:'__APP__/Outer/complete/',
+			dataType:'JSON',
+			type:'POST',
+			data:"order_id=<{$result['order_id']}>",
+			success: function(data) {
+				if (data.s=='ok') {
+					wintq('完成出库单成功',1,1500,0,'?');
+				}else {
+					wintq(data.s,3,1500,1,'');
+				}
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+
+<div id="content" style="padding-bottom:20px;">
+    <form action="__APP__/Outer/outeredit_do" method="post">
+    <table id="client" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" style="margin-left:0px;">
+ 	    <tr class="tr">
+        	<td class="left">出库单编号：</td>
+        	<td>            	
+        		<{$result['order_sn']}></td>
+            <td class="left">制单人：</td>
+            <td><{$result['Username']}></td>
+        </tr>
+    	<tr class="tr">
+        	<td class="left">仓库：</td>
+        	<td>            	
+        		<select name="warehouse_id" class="select">
+                	<volist name="volist" id="vo">
+                    	<if condition="$vo.Sid eq 63">
+                		<option value="<{$vo.ID}>" <if condition="$vo.ID eq $result['warehouse_id']">selected</if>><{$vo.MenuName}></option>
+                        </if>
+                    </volist>
+                </select><font>* </font></td>
+            <td class="left">供应商：</td>
+            <td><select name="supplier_id" class="select">
+                	<volist name="volist" id="vo">
+                    	<if condition="$vo.Sid eq 66">
+                		<option value="<{$vo.ID}>" <if condition="$vo.ID eq $result['supplier_id']">selected</if> ><{$vo.MenuName}></option>
+                        </if>
+                    </volist>
+                </select><font>* </font></td>
+        </tr>
+        <tr class="tr">
+        	<td class="left">订单状态：</td>
+        	<td><{$outer_order_status[$result['order_status']]}></td>
+            <td class="left">订单总金额：</td>
+            <td><if condition="$result['is_price'] eq 1"><{$result['order_amount']}><else/>未知</if></td>
+        </tr>
+        <tr class="tr">
+        	<td class="left">制单时间：</td>
+        	<td><{$result['add_time']}></td>
+            <td class="left"></td>
+            <td></td>
+        </tr>
+    	<tr class="tr">
+        	<td class="left">备注：</td>
+        	<td colspan="3"><textarea name="notes" class="textarea" style="width:600px; height:60px; margin:6px 0px;"><{$result['notes']}></textarea></td>
+        </tr>
+        <tr class="tr">
+        	<td colspan="4"  style="text-align: couter;padding:10px 0 5px 0;">
+        		<input type="hidden" name="ID" value="<{$result['order_id']}>" />
+        		<if condition="$result['order_status'] eq 0">
+	    			<input type="submit" class="submit" id="save" value="保存" />
+	    			<input type="button" class="submit" id="confirm" value="确认" />
+	    		<elseif condition="$result['order_status'] eq 1" />
+			    	<input type="button" class="submit" id="unconfirm" value="取消确认" />
+			    	<input type="button" class="submit" id="outer" value="出库" />
+		    	<elseif condition="$result['order_status'] eq 2" />
+		    	    <input type="button" class="submit" id="complete" value="完成" />
+    			</if>
+    		</td>
+        </tr>
+    </table>
+    </form>
+    <br />
+    <h3><if condition="$result['order_status'] eq 0">
+    	<a href="javascript:void(0);" class="h3a goodsAdd">添加产品</a>
+    	</if>
+    </h3>
+        <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr class="goods_list">
+        	<th><input type="checkbox" class="indel" value="del" /></th>
+        	<th class="goods_list">编号</th>
+            <th class="goods_list">商品名称</th>
+            <th class="goods_list">单价</th>
+            <th class="goods_list">数量</th>
+            <th class="goods_list">合计</th>
+            <th class="goods_list">操作</th>
+        </tr>
+        <empty name="goods_list"><tr class="tr"><td class="tc" colspan="11">暂无数据，等待添加～！</td></tr><else />
+        <!--顶级数据-->
+        <volist name="goods_list" id="vo">
+        <tr class="tr <eq name="mod" value="1">tr2</eq> goods_list">
+        	<td class="tc"><input type="checkbox" class="delid" value="<{$vo.ID}>" /></td>
+            <td class="tc"><{$vo.order_goods_id}></td>
+            <td class="tc"><{$vo.goods_name}></td>
+            <td class="tc"><if condition="$result['is_price'] eq 1"><{$vo.price}><else/>未知</if></td>
+            <td class="tc"><{$vo.number}></td>
+            <td class="tc"><if condition="$result['is_price'] eq 1"><{$vo.sum_price}><else/>未知</if></td>
+            <td class="tc fixed_w"><if condition="$result['order_status'] eq 0"><a href="<{$vo.order_goods_id}>" class="edit"><img src="__IMAGE__/edit.png" border="0" title="修改" /></a><a href="<{$vo.order_goods_id}>" class="del"><img src="__IMAGE__/delete.png" border="0" title="删除" /></a></if></if></td>
+        </tr>
+        </volist>
+        </empty>
+    </table>
+        <h1 class="action_title">操作记录</h1>
+    <table id="table" width="60%" style="width:60%;margin-top:0px;" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+   		<tr class="goods_list">
+	        <th class="goods_list">单据状态</th>
+	        <th class="goods_list">操作用户</th>
+	        <th class="goods_list">操作记录</th>
+	        <th class="goods_list">操作时间</th>
+       </tr>
+       <empty name="action_list"><tr class="tr"><td class="tc" colspan="11">暂无数据，等待添加～！</td></tr><else />
+       <!--顶级数据-->
+       <volist name="action_list" id="vo">
+       <tr class="tr <eq name="mod" value="1">tr2</eq> goods_list">
+           <td class="tc"><{$outer_order_status.$vo[order_status]}></td>
+           <td class="tc"><{$vo.action_user}></td>
+           <td class="tc"><{$vo.action_note}></td>
+           <td class="tc"><{$vo.log_time}></td>
+       </tr>
+       </volist>
+       </empty>
+    </table>
+</div>
+</body>
+</html>

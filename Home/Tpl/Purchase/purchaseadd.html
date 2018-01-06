@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加新客户|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function() {
+	var $purchase = $('#client');
+	$('.submit').click(function() {
+		var 
+			warehouse_id = $purchase.find('.select').eq(0).val(),
+			supplier_id = $purchase.find('.select').eq(1).val();
+		
+		if (!tcheck(warehouse_id,'','请选择仓库')) { return false; }
+		if (!tcheck(supplier_id,'','请选择供应商')) { return false; }
+		wintq('正在处理，请稍后...',4,20000,0,'');
+		$('form').submit();
+	});
+});
+</script>
+</head>
+<body>
+<div id="content" style="padding-bottom:20px;">
+    <form action="__APP__/Purchase/purchaseadd_do" method="post">
+    <table id="client" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr class="tr">
+        	<td class="left">仓库：</td>
+        	<td>            	
+        		<select name="warehouse_id" class="select">
+                	<volist name="volist" id="vo">
+                    	<if condition="$vo.Sid eq 63">
+                		<option value="<{$vo.ID}>"><{$vo.MenuName}></option>
+                        </if>
+                    </volist>
+                </select><font>* </font></td>
+            <td class="left">供应商：</td>
+            <td><select name="supplier_id" class="select">
+                	<volist name="volist" id="vo">
+                    	<if condition="$vo.Sid eq 66">
+                		<option value="<{$vo.ID}>"><{$vo.MenuName}></option>
+                        </if>
+                    </volist>
+                </select><font>* </font></td>
+        </tr>
+    	<tr class="tr">
+        	<td class="left">备注：</td>
+        	<td colspan="3"><textarea name="notes" class="textarea" style="width:600px; height:60px; margin:6px 0px;"></textarea></td>
+        </tr>
+    </table>
+    <input type="submit" class="submit" value="提交" style="margin:20px 0 0 30px;" />
+    </form>
+</div>
+</body>
+</html>

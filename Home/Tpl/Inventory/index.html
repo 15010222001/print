@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script>
+$(document).ready(function() {
+    $('#content h2 .add').click(function() {
+		popload('添加管理用户',600,380,'__APP__/User/useradd/');
+		addDiv($('#iframe_pop'));
+		popclose();
+	});
+	$('#content #table .tr .edit').click(function(event) {
+		event.preventDefault();
+		var id=$(this).attr('href');
+		if (id=='' || isNaN(id)) {
+			wintq('ID参数不正确',3,1000,1,'');
+			return false;
+		}else {
+			popload('修改用户信息',740,420,'__APP__/User/useredit/id/'+id);
+			addDiv($('#iframe_pop'));
+			popclose();
+		}
+	});
+	$('#content #table .tr .del').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要删除该数据吗？')) {
+			return false;
+		}
+		var id=$(this).attr('href');
+		if (id=='' || isNaN(id)) {
+			wintq('ID参数不正确',3,1000,1,'');
+			return false;
+		}else {
+			wintq('正在删除，请稍后...',4,20000,0,'');
+			$.ajax({
+				url:'__APP__/User/userdel/',
+				dataType:'json',
+				type:'POST',
+				data:'post=ok&id='+id,
+				success: function(data) {
+					if (data.s=='ok') {
+						wintq('删除成功',1,1500,0,'?');
+					}else {
+						wintq(data.s,3,1500,1,'');
+					}
+				}
+			});
+		}
+	});
+	$('#dely').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要删除选择项吗？')) {
+			return false;
+		}
+		var delid='';
+		for (i=0; i<$('#table .delid').size(); i++) {
+			if (!$('#table .delid').eq(i).attr('checked')==false) {
+				delid=delid+$('#table .delid').eq(i).val()+',';
+			}
+		}
+		if (delid=='') {
+			wintq('请选中后再操作',2,1500,1,'');
+		}else {
+			wintq('正在删除，请稍后...',4,20000,0,'');
+			$.ajax({
+				url:'__APP__/User/in_user_del/',
+				dataType:'JSON',
+				type:'POST',
+				data:'delid='+delid,
+				success: function(data) {
+					if (data.s=='ok') {
+						wintq('删除成功',1,1500,0,'?');
+					}else {
+						wintq(data.s,3,1500,1,'');
+					}
+				}
+			});
+		}
+	});
+});
+</script>
+</head>
+<body>
+<div id="content">
+	<h1>首页 > 进销存管理 > 库存查询</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+        <div class="search">
+        	<form action="__ACTION__" method="get">
+        	<input type="text" name="keyword" class="text" value="<{$keyword}>" />
+            <input type="submit" class="so" value="搜 索" />
+            </form>
+        </div>
+    </h2>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+        	<th>编号</th>
+            <th>仓库</th>
+            <th>商品名称</th>
+            <th>实际库存</th>
+            <th>可用库存</th>
+            <th>警戒库存</th>
+        </tr>
+        <if condition="$co eq 0"><tr class="tr"><td class="tc" colspan="11">暂无数据，等待添加～！</td></tr></if>
+        <!--顶级数据-->
+        <volist name="volist" id="vo">
+        <tr class="tr <eq name="mod" value="1">tr2</eq>">
+            <td class="tc"><{$vo.id}></td>
+            <td class="tc"><{$vo.warehouse_name}></td>
+            <td class="tc"><{$vo.goods_name}></td>
+            <td class="tc"><{$vo.actual_number}></td>
+            <td class="tc"><{$vo.stock_number}></td>
+            <td class="tc"><{$vo.alert_number}></td>
+        </tr>
+        </volist>
+    </table>
+    <div id="page">&nbsp;&nbsp;&nbsp;&nbsp;<{$page}></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>联系人|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script>
+$(document).ready(function() {
+	function Operating() {
+		//新增
+		$('#content h3 .add').click(function(event) {
+			event.preventDefault();
+			var url = $(this).attr('href');
+			window.top.c.window.wincontactAdd(url);
+		});
+		//修改
+		$('#content #table .tr .edit').click(function(event) {
+			event.preventDefault();
+			var id=$(this).attr('href');
+			window.top.c.window.wincontactEdit(id);
+		});
+		$('#content #table .tr .del').click(function(event) {
+			event.preventDefault();
+			if (!confirm('确定要删除该数据吗？')) {
+				return false;
+			}
+			var id=$(this).attr('href');
+			if (id=='' || isNaN(id)) {
+				wintq('ID参数不正确',3,1000,1,'');
+				return false;
+			}else {
+				wintq('正在删除，请稍后...',4,20000,0,'');
+				$.ajax({
+					url:'__APP__/Client/contact_del/',
+					dataType:'json',
+					type:'POST',
+					data:'post=ok&id='+id,
+					success: function(data) {
+						if (data.s=='ok') {
+							wintq('删除成功',1,1500,0,'?');
+						}else {
+							wintq(data.s,3,1500,1,'');
+						}
+					}
+				});
+			}
+		});
+		$('#dely').click(function(event) {
+			event.preventDefault();
+			if (!confirm('确定要添加选择项商品吗？')) {
+				return false;
+			}
+			var goods_data={};
+			var delid=false;
+			for (i=0; i<$('#table .delid').size(); i++) {
+				if (!$('#table .delid').eq(i).attr('checked')==false) {
+					goods_data[i] = {};
+					goods_data[i].goods_id = $('#table .delid').eq(i).val();
+					goods_data[i].price    = $('#table .delid').eq(i).parent().next().next().next().children("input:eq(0)").val();
+					goods_data[i].number   = $('#table .delid').eq(i).parent().next().next().next().next().children("input:eq(0)").val();
+					delid = true;
+				}
+			}
+			var params = {"item":goods_data,"order_id":<{$_GET['order_id']}>};
+			if (!delid) {
+				wintq('请选中后再操作',2,1500,1,'');
+			}else {
+				wintq('正在添加，请稍后...',4,20000,0,'');
+				$.ajax({
+					url:'__APP__/Enter/addgoods/',
+					dataType:'JSON',
+					type:'POST',
+					data:params,
+					success: function(data) {
+						if (data.s=='ok') {
+							wintq('添加成功',1,1500,0,'?');
+						}else {
+							wintq(data.s,3,1500,1,'');
+						}
+					}
+				});
+			}
+		});
+		//分页
+		$('#page .page a').click(function(event) {
+			event.preventDefault();
+			var url = $(this).attr('href');
+			contactajax(url);
+		});
+	}
+	//拉取客户信息
+	function contactajax(url) {
+		$.get(url, function(data) {
+			//回调函数
+			data = eval('('+data+')');
+			if (data.s=='ok') {
+				//有数据的情况下
+				$('#table .tr').remove();
+				$('#page .page').remove();
+				$('#table').append(data.html);
+				$('#page').append(data.page);
+			}else {
+				//没有数据的情况下
+				$('#table .tr').remove();
+				$('#page .page').remove();
+				$('#table').append(data.html);
+			}
+			Operating();
+		});
+	}
+	contactajax('__APP__/Enter/wincontactajax?Cid=<{$Cid}>');
+	var speed='';
+	$('.submit').click(function() {
+		clearTimeout(speed);
+		var keyword = $("#keyword").val();
+		speed = setTimeout(function() {
+			contactajax('__APP__/Enter/wincontactajax?Cid=<{$Cid}>'+'&keyword='+keyword);
+		},300);
+	});
+});
+</script>
+</head>
+<body>
+<div id="content" style="margin:0 auto; width:97%;">
+    <table id="client" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" style="margin-left:0px;">
+    	<tr class="tr">
+        	<td class="left">商品名称：</td>
+        	<td><input name="keyword" id="keyword" type="text" class="ctext" size="30"  value="<{$CompanyName}>"/><font></font></td>
+    	    <td class="left"></td>
+        	<td><input type="submit" class="submit" value="搜索"  /></td>
+        </tr>
+    </table>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+        	<th><input type="checkbox" class="indel" value="del" /></th>
+            <th>货号</th>
+            <th>产品名称</th>
+            <th>单价</th>
+            <th>数量</th>
+        </tr>
+    </table>
+    <div id="page"><a href="javascript:;" class="selbox">全选</a><a href="javascript:;" class="anti">反选</a><a href="javascript:;" class="unselbox">全不选</a>&nbsp;&nbsp;对选中项进行&nbsp;&nbsp;<a href="javascript:;" id="dely">添加商品到入库单</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>修改联系人|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function() {
+	var $client = $('#client');
+	$('.submit').click(function() {
+		var 
+			ContactName = $client.find('.dtext').val(),
+			Qq = $client.find('.ctext').eq(0).val(),
+			Skype = $client.find('.ctext').eq(1).val(),
+			Alww = $client.find('.ctext').eq(2).val(),
+			Fax = $client.find('.ctext').eq(3).val();
+			Phone = $client.find('.ctext').eq(4).val(),
+			Tel = $client.find('.ctext').eq(5).val();
+			Email = $client.find('.ctext').eq(6).val();
+			Content = $client.find('.textarea').val();
+					
+		if (!tcheck(ContactName,'0,30','联系人名字请在30个字符以内','length')) { return false; }
+		if (!tcheck(Qq,'0,30','QQ号码请在30个字符以内','length')) { return false; }
+		if (!tcheck(Skype,'0,30','Skype号码请在30个字符以内','length')) { return false; }
+		if (!tcheck(Alww,'0,30','旺旺号请在30个字符以内','length')) { return false; }
+		if (!tcheck(Phone,'0,30','手机号码请在30个字符以内','length')) { return false; }
+		if (!tcheck(Tel,'0,20','电话号码请在20个字符以内','length')) { return false; }
+		if (!tcheck(Fax,'0,20','传真请在20个字符以内','length')) { return false; }
+		if (!tcheck(Email,'0,40','Email请在40个字符以内','length')) { return false; }
+		if (!tcheck(Content,'0,1000','备注说明请在1000个字符以内','length')) { return false; }
+		
+		if (!tcheck(Qq,'number','QQ号码必须是数字')) { return false; }
+		if (!tcheck(Phone,'number','手机号码必须是数字')) { return false; }
+		wintq('正在处理，请稍后...',4,20000,0,'');
+		$('form').submit();
+	});
+});
+</script>
+</head>
+<body>
+
+<div id="content" style="padding-bottom:0;">
+    <form action="__APP__/Outer/goodsedit_do" method="post">
+    <table id="client" style="width:360px;" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr class="tr">
+        	<td class="left">商品名称：</td>
+        	<td><{$result['goods_name']}></td>       
+        </tr>
+        <tr class="tr">
+        	<td class="left">价格：</td>
+        	<td><input name="price" type="text" class="ctext" size="30" value="<{$result['price']}>" /></td>       
+        </tr>
+        <tr class="tr">
+        	<td class="left">数量：</td>
+        	<td><input name="number" type="text" class="ctext" size="30" value="<{$result['number']}>" /></td>       
+        </tr>
+    </table><input type="hidden" name="ID" value="<{$result['order_goods_id']}>" />
+    <input type="submit" class="submit" value="提交" style="margin:20px 0 0 60px;" />
+    </form>
+</div>
+</body>
+</html>

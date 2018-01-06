@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加新客户|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function() {
+	var $goods = $('#client');
+	$('.submit').click(function() {
+		var 
+			goods_sn = $goods.find('.ctext').eq(0).val(),
+			goods_name = $goods.find('.ctext').eq(1).val();
+		
+		if (!tcheck(goods_sn,'','请填写货号')) { return false; }
+		if (!tcheck(goods_name,'','请填写商品名称')) { return false; }
+		wintq('正在处理，请稍后...',4,20000,0,'');
+		$('form').submit();
+	});
+});
+</script>
+</head>
+<body>
+<div id="content" style="padding-bottom:20px;">
+    <form action="__APP__/Goods/goodsadd_do" method="post">
+    <table id="client" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr class="tr">
+    	    <td class="left">订单名称：</td>
+            <td><input name="goods_name" type="text" class="ctext" size="30" /><font>* </font></td>
+    	
+        	<td class="left">货号：</td>
+        	<td><input name="goods_sn" type="text" class="ctext" size="30" /><font>* </font></td>
+        </tr>
+    	<tr class="tr">
+        	<td class="left">价格：</td>
+        	<td><input name="price" type="text" class="ctext" size="30" />元<font></font></td>
+            <td class="left">尺寸：</td>
+            <td><input name="barcode" type="text" class="ctext" size="30" /><font></font></td>
+        </tr>
+         <tr class="tr">
+        	<td class="left">介绍人：</td>
+        	<td><input name="introducer_name" type="text" class="ctext" size="30" /><font></font></td>
+        	<td class="left">电话：</td>
+        	<td><input name="introducer_tel" type="text" class="ctext" size="30" /><font></font></td>
+        </tr>
+        <tr class="tr">
+        	<td class="left">接收人：</td>
+        	<td><input name="consignee_name" type="text" class="ctext" size="30" /><font></font></td>
+        	<td class="left">电话：</td>
+        	<td><input name="consignee_tel" type="text" class="ctext" size="30" /><font></font></td>
+        </tr>
+         <tr class="tr">
+        	<td class="left">交货时间：</td>
+        	<td><input class="Wdate" name="delivery_time" type="text" onfocus="WdatePicker({startDate:'%y-%M-01 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true})">
+        	</td>
+        </tr>
+    </table>
+    <input type="submit" class="submit" value="提交" style="margin:20px 0 0 30px;" />
+    </form>
+</div>
+</body>
+</html>

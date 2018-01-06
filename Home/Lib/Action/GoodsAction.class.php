@@ -1,5 +1,5 @@
 <?php
-//客户管理类
+//工厂管理类
 class GoodsAction extends CommonAction {
 	public function index() {
 		parent::userauth2(87);

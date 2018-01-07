@@ -78,7 +78,6 @@ class PurchaseAction extends CommonAction {
 						<td class='tc'><input type='checkbox' class='delid' {$disabled} value='".$vo['order_id']."' /></td>
 						<td class='tc'>".$vo['order_id']."</td>
 						<td class='tc'><a href='".$vo['order_id']."' class='edit'>".$vo['order_sn']."</a></td>
-						<td class='tc'>".$vo['warehouse_id']."</td>
 						<td class='tc'>".$vo['supplier_id']."</td>
 						<td class='tc'>".$vo['order_amount']."</td>
 						<td class='tc'>".$purchase_order_status[$vo['order_status']]."</td>
@@ -537,7 +536,7 @@ class PurchaseAction extends CommonAction {
 		$this->assign('purchase_order_status',$purchase_order_status);
 		$this->display('purchaseedit');
 	}
-	//修改客户资料处理
+	//修改 保存 采购单处理
 	public function purchaseedit_do() {
 		//验证用户权限
 		parent::win_userauth(93);
@@ -548,6 +547,11 @@ class PurchaseAction extends CommonAction {
 			$data['supplier_id']   = I('post.supplier_id','','htmlspecialchars');
 			$data['warehouse_id']  = I('post.warehouse_id','','htmlspecialchars');
 			$data['notes']         = I('post.notes','','htmlspecialchars');
+			$data['size']   = I('post.size','','htmlspecialchars');
+			$data['quantity']  = I('post.quantity','','htmlspecialchars');
+			$data['specification']  = I('post.quantity','','htmlspecialchars');
+			$data['amount']  = I('post.quantity','','htmlspecialchars');
+			$data['order_status'] = 2;
 			$purchase = M('Purchase_order');
 			if ($purchase->create($data)) {
 				$purchase->save();

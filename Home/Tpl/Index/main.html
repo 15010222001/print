@@ -126,11 +126,11 @@ $(function() {
     <div id="left">
     	<ul id="ul">
         	<volist name="list" id="li">
-        	<li><a class="a" href="<if condition="$li.ModuleUrl eq ''">javascript:;<else />__APP__/<{$li.ModuleUrl}></if>" target="c"><img src="/erp<{$li.ModuleImg}>" height="26" /><{$li.ModuleName}></a>
+        	<li><a class="a" href="<if condition="$li.ModuleUrl eq ''">javascript:;<else />__APP__/<{$li.ModuleUrl}></if>" target="c"><img src="__ROOT__<{$li.ModuleImg}>" height="26" /><{$li.ModuleName}></a>
             	<dl>
             	<foreach name="volist" item="vo">
             		<if condition="$li['ID'] eq $vo['Sid']">
-                	<dd><a href="<if condition="$vo.ModuleUrl eq ''">javascript:;<else />__APP__/<{$vo.ModuleUrl}></if>" target="c"><img src="/erp<{$vo.ModuleImg}>" /><{$vo.ModuleName}></a></dd>
+                	<dd><a href="<if condition="$vo.ModuleUrl eq ''">javascript:;<else />__APP__/<{$vo.ModuleUrl}></if>" target="c"><img src="__ROOT__<{$vo.ModuleImg}>" /><{$vo.ModuleName}></a></dd>
                     </if>
                 </foreach>
                 </dl>

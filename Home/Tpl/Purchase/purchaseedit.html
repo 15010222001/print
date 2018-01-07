@@ -197,6 +197,23 @@ $(document).ready(function() {
             <td class="left">订单总金额：</td>
             <td><if condition="$result['is_price'] eq 1"><{$result['order_amount']}><else/>未知</if></td>
         </tr>
+        
+        <tr class="tr">
+        	<td class="left">尺寸：</td>
+        	<td><input class="ctext" type="text" name="size" value="<if condition="$result['size']"><{$result['size']}><else/></if>" /></td>
+            <td class="left">数量：</td>
+            <td><input class="ctext" type="text" name="quantity" value="<if condition="$result['quantity']"><{$result['quantity']}><else/></if>" /></td>
+            
+        </tr>
+        
+        <tr class="tr">
+        	<td class="left">规格：</td>
+        	<td><input class="ctext" type="text" name="specification" value="<if condition="$result['specification']"><{$result['specification']}><else/></if>" /></td>
+            <td class="left">总金额：</td>
+           	<td><input class="ctext" type="text" name="amount" value="<if condition="$result['amount']"><{$result['amount']}><else/></if>" /></td>
+            
+        </tr>
+        
         <tr class="tr">
         	<td class="left">制单时间：</td>
         	<td><{$result['add_time']}></td>
@@ -211,14 +228,12 @@ $(document).ready(function() {
         	<td colspan="4"  style="text-align: cpurchase;padding:10px 0 5px 0;">
         		<input type="hidden" name="ID" value="<{$result['order_id']}>" />
         		<if condition="$result['order_status'] eq 0">
-	    			<input type="submit" class="submit" id="save" value="保存" />
 	    			<input type="button" class="submit" id="confirm" value="确认" />
 	    		<elseif condition="$result['order_status'] eq 1" />
+	    		<input type="submit" class="submit" id="save" value="保存" />
 			    	<input type="button" class="submit" id="unconfirm" value="取消确认" />
 			    <elseif condition="$result['order_status'] eq 2" />
 		    	    <input type="button" class="submit" id="complete" value="完成" />
-		    	<elseif condition="$result['order_status'] eq 2" />
-		    	
     			</if>
     		</td>
         </tr>

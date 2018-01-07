@@ -1,0 +1,10 @@
+Public/.DS_Store
+Uploads/.DS_Store
+ThinkPHP/.DS_Store
+Home/.DS_Store
+.project
+.DS_Store
+.buildpath
+.DS_Store
+Home/Runtime/Temp/
+Home/Runtime/Cache/

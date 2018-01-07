@@ -22,6 +22,7 @@ return array(
 		'__CSS__' => __ROOT__.'/Public/style/home',
 		'__IMAGE__' => __ROOT__.'/Public/image/home',
 		'__UPLOAD__' => __ROOT__,
+		'__ROOT__' => __ROOT__,
 	)
 );
 ?>

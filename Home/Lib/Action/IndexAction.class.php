@@ -109,7 +109,6 @@ class IndexAction extends Action {
 	}
 	//管理界面
 	public function main() {
-		A('Common');
 		$this->session=$_SESSION['ThinkUser'];
 		//===模块导航开始===
 		if (!S('list')) {

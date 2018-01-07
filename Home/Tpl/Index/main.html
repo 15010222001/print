@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><{$configcache['Title']}></title>
+<title><{$configcache['title']}></title>
 <link rel="stylesheet" type="text/css" href="__CSS__/main.css"  />
 <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
 <script type="text/javascript" src="__JS__/jquery.js"></script>
@@ -54,6 +54,7 @@ window.onload=function() {
 	$('#Remindh').click(function() {
 		remind();
 	});
+	/*
 	//事务提醒
 	function Link() {
 		$.ajax({
@@ -74,6 +75,7 @@ window.onload=function() {
 	}
 	setInterval(Link,90*60);
 	Link();
+	*/
 }
 $(function() {
 	for (i=0; i<$('#left dl').size(); i++) {
@@ -100,7 +102,7 @@ $(function() {
 <div id="Remindh">0</div>
 <div id="main">
 	<div id="header">
-    	<div id="logo"><{$configcache['Title']}></div>
+    	<div id="logo"><{$configcache['title']}></div>
         <div id="cache" title="清空缓存"></div>
         <div id="home" title="首页"></div>
         <div id="all" title="全局导航"></div>

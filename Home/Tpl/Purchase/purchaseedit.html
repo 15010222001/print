@@ -104,7 +104,8 @@ $(document).ready(function() {
 			url:'__APP__/Purchase/confirm/',
 			dataType:'JSON',
 			type:'POST',
-			data:"order_id=<{$result['order_id']}>",
+			//data:"order_id=<{$result['order_id']}>",
+			data: $('form').serialize(),
 			success: function(data) {
 				if (data.s=='ok') {
 					wintq('确认成功',1,1500,0,'?');
@@ -224,19 +225,21 @@ $(document).ready(function() {
         	<td class="left">备注：</td>
         	<td colspan="3"><textarea name="notes" class="textarea" style="width:600px; height:60px; margin:6px 0px;"><{$result['notes']}></textarea></td>
         </tr>
+        <if condition="$result['order_status'] lt 4">
         <tr class="tr">
         	<td colspan="4"  style="text-align: cpurchase;padding:10px 0 5px 0;">
-        		<input type="hidden" name="ID" value="<{$result['order_id']}>" />
+        		<input type="hidden" name="orderID" value="<{$result['order_id']}>" />
         		<if condition="$result['order_status'] eq 0">
 	    			<input type="button" class="submit" id="confirm" value="确认" />
 	    		<elseif condition="$result['order_status'] eq 1" />
-	    		<input type="submit" class="submit" id="save" value="保存" />
+	    			<input type="submit" class="submit" id="save" value="保存" />
 			    	<input type="button" class="submit" id="unconfirm" value="取消确认" />
 			    <elseif condition="$result['order_status'] eq 2" />
 		    	    <input type="button" class="submit" id="complete" value="完成" />
     			</if>
     		</td>
         </tr>
+        </if>
     </table>
     </form>
     <br />

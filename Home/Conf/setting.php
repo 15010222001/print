@@ -3,7 +3,7 @@
 	'SHOW_PAGE_TRACE'=>true,
 	'APP_STATUS'=>true,
 	'USER_AUTH_SESSION'=>'600',
-	'LOG_RECORD'=>true,
+	'LOG_RECORD'=>false,
 	'LOG_LEVEL'=>'EMERG,ALERT,CRIT,ERR',
 	'URL_MODEL'=>'0',
 	'URL_CASE_INSENSITIVE'=>false,

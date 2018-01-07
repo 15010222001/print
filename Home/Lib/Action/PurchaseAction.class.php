@@ -76,10 +76,11 @@ class PurchaseAction extends CommonAction {
 				$html .= "
 					<tr class='tr ".$tr2."'>
 						<td class='tc'><input type='checkbox' class='delid' {$disabled} value='".$vo['order_id']."' /></td>
-						<td class='tc'>".$vo['order_id']."</td>
 						<td class='tc'><a href='".$vo['order_id']."' class='edit'>".$vo['order_sn']."</a></td>
 						<td class='tc'>".$vo['supplier_id']."</td>
-						<td class='tc'>".$vo['order_amount']."</td>
+						<td class='tc'>".$vo['size']."</td>
+						<td class='tc'>".$vo['quantity']."</td>
+						<td class='tc'>".$vo['specification']."</td>
 						<td class='tc'>".$purchase_order_status[$vo['order_status']]."</td>
 						<td class='tc'>".$vo['add_time']."</td>
 						<td class='tc'>".$vo['Username']."</td>
@@ -543,7 +544,7 @@ class PurchaseAction extends CommonAction {
 		if ($this->isPost()) {
 			$data=array();
 			//客户资料信息
-			$data['order_id']      = I('post.ID','');
+			$data['order_id']      = I('post.orderID','');
 			$data['supplier_id']   = I('post.supplier_id','','htmlspecialchars');
 			$data['warehouse_id']  = I('post.warehouse_id','','htmlspecialchars');
 			$data['notes']         = I('post.notes','','htmlspecialchars');
@@ -1207,14 +1208,22 @@ class PurchaseAction extends CommonAction {
 	    parent::userauth(103);
 	    //判断是否是ajax请求
 	    if ($this->isAjax()) {
-	        $order_id = I('post.order_id','');
+	        $order_id = I('post.orderID','');
 	        if ($order_id=='' || !is_numeric($order_id)) {
 	            parent::operating(__ACTION__,1,'参数错误：'.$id);
 	            R('Public/errjson',array('参数ID类型错误'));
 	        }else {
 	            $purchase = M('Purchase_order');
-	            $where['order_id'] = $order_id;
+	            $data['supplier_id']   = I('post.supplier_id','','htmlspecialchars');
+	            $data['warehouse_id']  = I('post.warehouse_id','','htmlspecialchars');
+	            $data['notes']         = I('post.notes','','htmlspecialchars');
+	            $data['size']   = I('post.size','','htmlspecialchars');
+	            $data['quantity']  = I('post.quantity','','htmlspecialchars');
+	            $data['specification']  = I('post.quantity','','htmlspecialchars');
+	            $data['amount']  = I('post.quantity','','htmlspecialchars');
 	            $data['order_status'] = 1;
+	            $where['order_id'] = $order_id;
+	            
 	            if ($purchase->where($where)->save($data)) {
 	                //D('Warehouse_inventory')->purchaseConfirm($order_id);
 	                parent::purchase($order_id,1,'确认采购单');

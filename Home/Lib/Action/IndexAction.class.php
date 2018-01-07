@@ -110,6 +110,7 @@ class IndexAction extends Action {
 	//管理界面
 	public function main() {
 		$this->session=$_SESSION['ThinkUser'];
+		$configcache = C();
 		//===模块导航开始===
 		if (!S('list')) {
 			$module = M('module');
@@ -118,6 +119,7 @@ class IndexAction extends Action {
 			S('list', $list, $configcache['DataCache']*3600);
 			S('volist', $volist, $configcache['DataCache']*3600);
 		}
+		$this->assign('configcache', $configcache);
 		$this->assign('list', S('list'));
 		$this->assign('volist', S('volist'));
 		//===模块导航结束===

@@ -53,7 +53,7 @@ class PurchaseAction extends CommonAction {
 			foreach($volist as $vo) {
 				//将搜索的标为红色
 				$company = str_replace($keyword,'<font>'.$keyword.'</font>',$vo['CompanyName']);		//公司名称
-				if ($b=$i % 2 == 0) { 
+				if ($i % 2 == 0) { 
 					$tr2 = 'tr2';
 				}else {
 					$tr2 = '';
@@ -1307,7 +1307,7 @@ class PurchaseAction extends CommonAction {
 	        }else {
 	            $purchase = M('Purchase_order');
 	            $where['order_id'] = $order_id;
-	            $data['order_status'] = 4;
+	            $data['order_status'] = 3;
 	            if ($purchase->where($where)->save($data)) {
 	                parent::purchase($order_id,4,'采购单完成');
 	                parent::operating(__ACTION__,0,'完成成功：'.$id);

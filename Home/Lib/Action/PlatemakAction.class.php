@@ -79,7 +79,7 @@ class PlatemakAction extends CommonAction{
 						<tr class='tr ".$tr2."'>
 							<td class='tc'><input type='checkbox' class='delid' value='".$vo['ID']."' /></td>
 							<td class='tc'>".$vo['ID']."</td>
-							<td class='tc'>".$vo['auth_id']."</td>
+							<td class='tc'>".$this->getAuthInfo('Username', $vo['auth_id'])['Username']."</td>
 							<td class='tc'>".$this->get_order_info($vo['order_id'])."</td>
 							<td class='tc'>".$vo['number']."</td>
 							<td class='tc'>".date('Y-m-d H:i:s', $vo['start_time'])."</td>

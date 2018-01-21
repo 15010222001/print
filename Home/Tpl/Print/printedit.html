@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加新客户|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function() {
+	var $purchase = $('#client');
+	$('.submit').click(function() {
+		var  warehouse_id = $purchase.find('.select').eq(0).val(),
+		if (!tcheck(supplier_id,'','请选择订单')) { return false; }
+		wintq('正在处理，请稍后...',4,20000,0,'');
+		$('form').submit();
+	});
+});
+</script>
+</head>
+<body>
+<div id="content" style="padding-bottom:20px;">
+    <form action="__APP__/Print/printedit_do" method="post">
+    <table id="client" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr class="tr">
+        	<td class="left">数量：</td>
+        	<td> <input name="number" type="text" value="<{$info.number}>" class="ctext" size="30"></td>
+        	<td class="left">订单：</td>
+            <td>
+            	<select name="order_id" class="select">
+                	<volist name="order_result" id="vo">
+                		<option value="<{$vo.goods_id}>" <if condition="$vo.goods_id eq $info['order_id']">selected</if> ><{$vo.goods_name}></option>
+                    </volist>
+                </select>
+                <font>* </font>
+             </td>
+        </tr>  
+        
+        <tr class="tr">
+        	<td class="left">开始时间：</td>
+        	<td><input class="Wdate" name="start_time" type="text" value="<{$info.start_time|date="Y-m-d H:i:s", ###}>" onfocus="WdatePicker({startDate:'%y-%M-01 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true})">
+        	
+        	<td class="left">结束时间：</td>
+        	<td><input class="Wdate" name="end_time" type="text" value="<{$info.end_time|date="Y-m-d H:i:s", ###}>" onfocus="WdatePicker({startDate:'%y-%M-01 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true})">
+        </tr>
+        <tr class="tr">
+             <td class="left">印制人：</td>
+            <td>
+            	<{$action_user}>
+             </td>
+        </tr>
+    	<tr class="tr">
+        	<td class="left">备注：</td>
+        	<td colspan="3"><textarea name="notes" class="textarea" style="width:600px; height:60px; margin:6px 0px;"> <{$info.notes}> </textarea></td>
+        </tr>
+    </table>
+     <input type="hidden" name='id' value="<{$info.ID}>" >
+    <input type="submit" class="submit" value="提交" style="margin:20px 0 0 30px;" />
+    </form>
+</div>
+</body>
+</html>

@@ -4,6 +4,17 @@ class CommonAction extends Action {
 		$this->checkAdminSession();
 		$this->configcache();
 	}
+	
+	//根据id获取用户信息
+	public function getAuthInfo($field, $id){
+		$user = D('user');
+		if(empty($field)){
+			$field = '*';
+		}
+		$info = $user->field($field)->where()->find();
+		return $info ? $info : null;
+	}
+	
 	//判断用户是否登录的方法
 	public function checkAdminSession() {
 		$nowtime = time();

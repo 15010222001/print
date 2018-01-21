@@ -16,13 +16,13 @@ function wincontactEdit(id) {
 		wintq('ID参数不正确',3,1000,1,'');
 		return false;
 	}else {
-		fpopload('修改联系人信息',860,430,'__APP__/Purchase/contactedit/id/'+id);
+		fpopload('修改联系人信息',860,430,'__APP__/Print/contactedit/id/'+id);
 		addDiv($('#f_pop'));
 	}	
 }
 $(document).ready(function() {
     $('#content h2 .add').click(function() {
-		popload('新增制版信息',860,500,'__APP__/Typeset/typeadd/');
+		popload('新增印制信息',860,500,'__APP__/Print/printadd/');
 		addDiv($('#iframe_pop'));
 		popclose();
 	});
@@ -32,7 +32,7 @@ $(document).ready(function() {
 			var _this = $(this);
 			var id = $(this).attr('alt');
 			var opens = $(this).attr('data-title');
-			$.get('__APP__/Purchase/opensharedo?id='+id+'&openshare='+opens,function(data) {
+			$.get('__APP__/Print/opensharedo?id='+id+'&openshare='+opens,function(data) {
 				data = eval('('+data+')');
 				if (data.s=='ok') {
 					if (opens==0) {
@@ -49,7 +49,7 @@ $(document).ready(function() {
 				}
 			});
 		});
-		//修改客户信息
+		//修改信息
 		$('#content #table .tr .edit').click(function(event) {
 			event.preventDefault();
 			var id=$(this).attr('href');
@@ -57,7 +57,7 @@ $(document).ready(function() {
 				wintq('ID参数不正确',3,1000,1,'');
 				return false;
 			}else {
-				popload('修改制版信息',860,500,'__APP__/Typeset/typeedit/id/'+id);
+				popload('修改制版信息',860,500,'__APP__/Print/printedit/id/'+id);
 				addDiv($('#iframe_pop'));
 				popclose();
 			}
@@ -75,7 +75,7 @@ $(document).ready(function() {
 			}else {
 				wintq('正在删除，请稍后...',4,20000,0,'');
 				$.ajax({
-					url:'__APP__/Typeset/type_del/',
+					url:'__APP__/Print/print_del/',
 					dataType:'json',
 					type:'POST',
 					data:'post=ok&id='+id,
@@ -106,7 +106,7 @@ $(document).ready(function() {
 			}else {
 				wintq('正在删除，请稍后...',4,20000,0,'');
 				$.ajax({
-					url:'__APP__/Typeset/type_indel/',
+					url:'__APP__/Print/print_indel/',
 					dataType:'JSON',
 					type:'POST',
 					data:'delid='+delid,
@@ -135,7 +135,7 @@ $(document).ready(function() {
 	}
 	//拉取排版信息
 	function purchaseajax(keyword) {
-		$.get('__APP__/Typeset/indexajax?keyword='+keyword, function(data) {
+		$.get('__APP__/Print/indexajax?keyword='+keyword, function(data) {
 			//回调函数
 			data = eval('('+data+')');
 			if (data.s=='ok') {

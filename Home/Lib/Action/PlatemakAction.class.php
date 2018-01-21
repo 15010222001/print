@@ -28,13 +28,12 @@ class PlatemakAction extends CommonAction{
 	//添加操作
 	public function platemak_do(){
 		$platemak = D('platemak');
-		$data['number'] = I('post.number');
+		$data['number'] = I('post.number', '', 'htmlspecialchars');
 		$data['start_time'] = strtotime(I('post.start_time'));
 		$data['end_time'] = strtotime(I('post.end_time'));
 		$data['order_id'] = I('post.order_id');
-		$data['notes'] = I('post.notes');
+		$data['notes'] = I('post.notes', '', 'htmlspecialchars');
 		$data['Recycle'] = 0;
-		$id = I('get.id');
 		if($platemak->create($data)){
 			$platemak->add();
 			parent::operating(__ACTION__,0,'新增成功：制版流程');
@@ -61,41 +60,44 @@ class PlatemakAction extends CommonAction{
 		$Page->setConfig('first','<img src="'.C('TMPL_PARSE_STRING.__IMAGE__').'/first.gif" border="0" title="第一页" />');
 		$Page->setConfig('last','<img src="'.C('TMPL_PARSE_STRING.__IMAGE__').'/last.gif" border="0" title="最后一页" />');
 		$show = $Page->show();							//分页显示输出
-		$dmenu = M('dmenu');
-		$dlist = $platemak->where($where)->order('ID asc')->select();
+		$dlist = $platemak->where($where)->order('ID desc')->select();
 		$html = '';
 		$i = 1;
-		
-		foreach($dlist as $vo) {
-			//将搜索的标为红色
-			$company = str_replace($keyword,'<font>'.$keyword.'</font>',$vo['CompanyName']);		//公司名称
-			if ($i % 2 == 0) {
-				$tr2 = 'tr2';
-			}else {
-				$tr2 = '';
+		if($count > 0){
+			foreach($dlist as $vo) {
+				//将搜索的标为红色
+				$company = str_replace($keyword,'<font>'.$keyword.'</font>',$vo['CompanyName']);		//公司名称
+				if ($i % 2 == 0) {
+					$tr2 = 'tr2';
+				}else {
+					$tr2 = '';
+				}
+				$str = "<a href='".$vo['ID']."' class='edit'><img src='".C('TMPL_PARSE_STRING.__IMAGE__')."/edit.png' border='0' title='查看/修改' /></a>
+						<a href='".$vo['ID']."' class='del'><img src='".C('TMPL_PARSE_STRING.__IMAGE__')."/delete.png' border='0' title='删除' /></a>";
+					
+				$html .= "
+						<tr class='tr ".$tr2."'>
+							<td class='tc'><input type='checkbox' class='delid' value='".$vo['ID']."' /></td>
+							<td class='tc'>".$vo['ID']."</td>
+							<td class='tc'>".$vo['auth_id']."</td>
+							<td class='tc'>".$this->get_order_info($vo['order_id'])."</td>
+							<td class='tc'>".$vo['number']."</td>
+							<td class='tc'>".date('Y-m-d H:i:s', $vo['start_time'])."</td>
+							<td class='tc'>".date('Y-m-d H:i:s', $vo['end_time'])."</td>
+							<td class='tc'>".date('Y-m-d H:i:s', $vo['add_time'])."</td>
+							<td class='tc'>".$vo['notes']."</td>
+							<td class='tc fixed_w'>".$str."</td>
+						</tr>
+					";
+				$i++;
 			}
-			$str = "<a href='".$vo['ID']."' class='edit'><img src='".C('TMPL_PARSE_STRING.__IMAGE__')."/edit.png' border='0' title='查看/修改' /></a>
-					<a href='".$vo['ID']."' class='del'><img src='".C('TMPL_PARSE_STRING.__IMAGE__')."/delete.png' border='0' title='删除' /></a>";
-				
-			$html .= "
-					<tr class='tr ".$tr2."'>
-						<td class='tc'><input type='checkbox' class='delid' value='".$vo['ID']."' /></td>
-						<td class='tc'>".$vo['ID']."</td>
-						<td class='tc'>".$vo['auth_id']."</td>
-						<td class='tc'>".$this->get_order_info($vo['order_id'])."</td>
-						<td class='tc'>".$vo['number']."</td>
-						<td class='tc'>".date('Y-m-d H:i:s', $vo['start_time'])."</td>
-						<td class='tc'>".date('Y-m-d H:i:s', $vo['end_time'])."</td>
-						<td class='tc'>".date('Y-m-d H:i:s', $vo['add_time'])."</td>
-						<td class='tc'>".$vo['notes']."</td>
-						<td class='tc fixed_w'>".$str."</td>
-					</tr>
-				";
-			$i++;
-		}
-		$data = array('s'=>'ok','html'=>$html,'page'=>'<span class="page">'.$show.'</span>');
+			$data = array('s'=>'ok','html'=>$html,'page'=>'<span class="page">'.$show.'</span>');
 			echo json_encode($data);
-		
+		}else{
+			$html = "<tr class='tr'><td class='tc' colspan='11'>暂无数据，等待添加～！</td></tr>";
+			$data = array('s'=>'no','html'=>$html);
+			echo json_encode($data);
+		}
 	}
 	
 	//获取订单名称

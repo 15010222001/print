@@ -7,14 +7,14 @@
 class PrintAction extends CommonAction{
 	
 	public function  index(){
-		parent::userauth2(91);
+		parent::userauth2(121);
+		$this->assign('title', C('common_title')['print_title']);
 		$this->display();
 	}
 	
 	public function printadd(){
-		$where = array('Recycle' => 0);
-		$order = $goods = D('Goods');
-		$order_result = $order->field('goods_id, goods_name')->where($where)->select();
+		parent::userauth2(122);
+		$order_result = $this->getOrderInfo();
 		$action_user   = $_SESSION['ThinkUser']['Username'];
 		$this->assign('action_user', $action_user);
 		$this->assign('volist', $order_result);
@@ -23,6 +23,7 @@ class PrintAction extends CommonAction{
 	
 	//添加
 	public function print_do(){
+		parent::userauth2(122);
 		$print = D('print');
 		$data['number'] = I('post.number', '', 'htmlspecialchars');
 		$data['start_time'] = strtotime(I('post.start_time'));
@@ -57,7 +58,7 @@ class PrintAction extends CommonAction{
 		$Page->setConfig('first','<img src="'.C('TMPL_PARSE_STRING.__IMAGE__').'/first.gif" border="0" title="第一页" />');
 		$Page->setConfig('last','<img src="'.C('TMPL_PARSE_STRING.__IMAGE__').'/last.gif" border="0" title="最后一页" />');
 		$show = $Page->show();							//分页显示输出
-		$dlist = $print->where($where)->order('ID desc')->select();
+		$dlist = $print->where($where)->order('ID desc')->limit($Page->firstRow.','.$Page->listRows)->select();
 		$html = '';
 		$i = 1;
 		if($count > 0){
@@ -97,19 +98,10 @@ class PrintAction extends CommonAction{
 		}
 	}
 	
-	//获取订单名称
-	private function get_order_info($order_id){
-		$order = M('goods');
-		$where = array('goods_id' => $order_id);
-		$order_info = $order->field('goods_id, goods_name, Recycle')->where($where)->find();
-		if(1 != $order_info['Recycle']){
-			return $order_info['goods_name'];
-		}else{
-			return '';
-		}
-	}
+	
 	
 	public function printedit(){
+		parent::userauth2(123);
 		$id = I('get.id');
 		if ($id=='' || !is_numeric($id)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -119,11 +111,8 @@ class PrintAction extends CommonAction{
 		$print = D('print');
 		$where = array('ID' => $id);
 		$info = $print->where($where)->find();
-		$where = array('Recycle' => 0);
-		$order = $goods = D('Goods');
-		$order_result = $order->field('goods_id, goods_name')->where($where)->select();
 		$action_user   = $_SESSION['ThinkUser']['Username'];
-		
+		$order_result = $this->getOrderInfo();
 		$this->assign('action_user', $action_user);
 		$this->assign('order_result', $order_result);
 		$this->assign('info', $info);
@@ -132,6 +121,7 @@ class PrintAction extends CommonAction{
 	
 	//更新
 	public function printedit_do(){
+		parent::userauth2(123);
 		$id = I('post.id');
 		if ($id=='' || !is_numeric($id)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -157,7 +147,7 @@ class PrintAction extends CommonAction{
 	}
 	
 	public function print_del(){
-		parent::userauth(94);
+		parent::userauth(124);
 		//判断是否是ajax请求
 		if ($this->isAjax()) {
 			$id=I('post.id','');
@@ -185,7 +175,7 @@ class PrintAction extends CommonAction{
 	//批量删除客户资料到回收站
 	public function print_indel() {
 		//验证用户权限
-		parent::userauth(94);
+		parent::userauth(124);
 		if ($this->isAjax()) {
 			if (!$delid=explode(',',I('post.delid',''))) {
 				R('Public/errjson',array('请选中后再删除'));

@@ -15,6 +15,26 @@ class CommonAction extends Action {
 		return $info ? $info : null;
 	}
 	
+	//获取订单名称
+	public function get_order_info($order_id){
+		$order = M('goods');
+		$where = array('goods_id' => $order_id);
+		$order_info = $order->field('goods_id, goods_name, Recycle')->where($where)->find();
+		if(1 != $order_info['Recycle']){
+			return $order_info['goods_name'];
+		}else{
+			return '';
+		}
+	}
+	
+	
+	//获取订单信息
+	public function getOrderInfo(){
+		$where = array('Recycle' => 0);
+		$order = $goods = D('Goods');
+		return  $order->field('goods_id, goods_name')->where($where)->select();
+	}
+	
 	//判断用户是否登录的方法
 	public function checkAdminSession() {
 		$nowtime = time();
@@ -128,11 +148,14 @@ class CommonAction extends Action {
 	}
 	//用户权限验证2(页面)
 	public function userauth2($auth) {
-		$comp=explode(',',$_SESSION['ThinkUser']['Competence']);			//当前用户权限获取
+		$comp=explode(',' , $_SESSION['ThinkUser']['Competence']);			//当前用户权限获取
 		array_pop($comp);
 		if (!in_array($auth,$comp)) {
 			$this->content='抱歉，您没有此操作权限';
-			exit($this->display('Public:error'));
+			//exit($this->display('Public:location'));
+			header('Content-Type: text/html; charset=utf-8');	//输出头，防止中文乱码
+			echo '<script>alert("'.$this->content.'"); window.top.location="'.__APP__.'"</script>';
+			exit;
 		}
 	}
 	//用户权限验证3(函数)

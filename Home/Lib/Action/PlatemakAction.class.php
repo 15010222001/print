@@ -10,12 +10,14 @@
 class PlatemakAction extends CommonAction{
 	
 	public function index(){
-		parent::userauth2(91);
+		parent::userauth2(114);
+		$this->assign('title', C('common_title')['plaatemak_title']);
 		$this->display();
 	}
 	
 	//添加页
 	public function platemakadd(){
+		parent::userauth2(113);
 		$where = array('Recycle' => 0);
 		$order = $goods = D('Goods');
 		$order_result = $order->field('goods_id, goods_name')->where($where)->select();
@@ -27,6 +29,7 @@ class PlatemakAction extends CommonAction{
 	
 	//添加操作
 	public function platemak_do(){
+		parent::userauth2(113);
 		$platemak = D('platemak');
 		$data['number'] = I('post.number', '', 'htmlspecialchars');
 		$data['start_time'] = strtotime(I('post.start_time'));
@@ -60,7 +63,7 @@ class PlatemakAction extends CommonAction{
 		$Page->setConfig('first','<img src="'.C('TMPL_PARSE_STRING.__IMAGE__').'/first.gif" border="0" title="第一页" />');
 		$Page->setConfig('last','<img src="'.C('TMPL_PARSE_STRING.__IMAGE__').'/last.gif" border="0" title="最后一页" />');
 		$show = $Page->show();							//分页显示输出
-		$dlist = $platemak->where($where)->order('ID desc')->select();
+		$dlist = $platemak->where($where)->order('ID desc')->limit($Page->firstRow.','.$Page->listRows)->select();
 		$html = '';
 		$i = 1;
 		if($count > 0){
@@ -100,20 +103,10 @@ class PlatemakAction extends CommonAction{
 		}
 	}
 	
-	//获取订单名称
-	private function get_order_info($order_id){
-		$order = M('goods');
-		$where = array('goods_id' => $order_id);
-		$order_info = $order->field('goods_id, goods_name, Recycle')->where($where)->find();
-		if(1 != $order_info['Recycle']){
-			return $order_info['goods_name'];
-		}else{
-			return '';
-		}
-	}
 	
 	//更新页面
 	public function platemakedit(){
+		parent::userauth2(115);
 		$id = I('get.id');
 		if ($id=='' || !is_numeric($id)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -137,6 +130,7 @@ class PlatemakAction extends CommonAction{
 	
 	//更新操作
 	public function platemak_edit_do(){
+		parent::userauth2(115);
 		$id = I('post.id');
 		if ($id =='' || !is_numeric($id)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -163,7 +157,7 @@ class PlatemakAction extends CommonAction{
 	}
 	//删除操作
 	public function platemak_del(){
-		parent::userauth(94);
+		parent::userauth(116);
 		//判断是否是ajax请求
 		if ($this->isAjax()) {
 			$id=I('post.id','');
@@ -192,7 +186,7 @@ class PlatemakAction extends CommonAction{
 	//批量删除客户资料到回收站
 	public function platemak_indel() {
 		//验证用户权限
-		parent::userauth(94);
+		parent::userauth(116);
 		if ($this->isAjax()) {
 			if (!$delid=explode(',',I('post.delid',''))) {
 				R('Public/errjson',array('请选中后再删除'));

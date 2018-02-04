@@ -2,7 +2,8 @@
 //客户管理类
 class PurchaseAction extends CommonAction {
 	public function index() {
-		parent::userauth2(91);
+		parent::userauth2(112);
+		$this->assign('title', C('common_title')['purchase_title']);
 		$this->display();
 	}
 	//客户资料Ajax请求
@@ -344,7 +345,7 @@ class PurchaseAction extends CommonAction {
 	}
 	//新增客户
 	public function purchaseadd() {
-		parent::win_userauth(92);
+		parent::win_userauth(109);
 		$dmenu=M('dmenu');
 		$volist=$dmenu->where('Sid <> 0')->order('Sortid asc')->select();
 		$this->assign('volist',$volist);
@@ -361,7 +362,7 @@ class PurchaseAction extends CommonAction {
 	//添加处理
 	public function purchaseadd_do() {
 		//验证用户权限
-		parent::win_userauth(92);
+		parent::win_userauth(109);
 		if ($this->isPost()) {
 			$data=array();
 			$cont=array();
@@ -498,7 +499,7 @@ class PurchaseAction extends CommonAction {
 	}
 	//修改客户资料
 	public function purchaseedit() {
-		parent::win_userauth(101);
+		parent::win_userauth(110);
 		$id = I('get.id','');
 		if ($id=='' || !is_numeric($id)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -540,7 +541,7 @@ class PurchaseAction extends CommonAction {
 	//修改 保存 采购单处理
 	public function purchaseedit_do() {
 		//验证用户权限
-		parent::win_userauth(93);
+		parent::win_userauth(110);
 		if ($this->isPost()) {
 			$data=array();
 			//客户资料信息
@@ -569,7 +570,7 @@ class PurchaseAction extends CommonAction {
 	}
 	//删除客户资料到回收站
 	public function purchase_del() {
-		parent::userauth(94);
+		parent::userauth(111);
 		//判断是否是ajax请求
 		if ($this->isAjax()) {
 			$id=I('post.id','');
@@ -596,7 +597,7 @@ class PurchaseAction extends CommonAction {
 	//批量删除客户资料到回收站
 	public function purchase_indel() {
 		//验证用户权限
-		parent::userauth(94);
+		parent::userauth(111);
 		if ($this->isAjax()) {
 			if (!$delid=explode(',',I('post.delid',''))) {
 				R('Public/errjson',array('请选中后再删除'));

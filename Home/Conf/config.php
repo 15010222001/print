@@ -12,7 +12,7 @@ return array(
 	'VAR_PAGE'=>'page',										//分页变量
 	//字段自动进行模糊查询
 	'DB_LIKE_FIELDS'=>'Username|Ip|CompanyName|ContactName',
-	'LOAD_EXT_CONFIG' => 'setting,core,db,webconfig,system',							//载入额外配置项文件
+	'LOAD_EXT_CONFIG' => 'setting,core,db,webconfig,system,title',							//载入额外配置项文件
 	'TOKEN_NAME' => '__hash__',  							// 令牌验证的表单隐藏字段名称
 	'TOKEN_TYPE'=>'md5', 									//令牌哈希验证规则 默认为MD5
 	

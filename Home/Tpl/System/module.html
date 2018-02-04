@@ -92,7 +92,7 @@ $(document).ready(function() {
         <volist name="list" id="vo">
         <tr class="tr <eq name="mod" value="1">tr2</eq>">
             <td class="tc fixed_w"><{$vo.ID}></td>
-            <td class="tl"><span style="color:#f9f9f9"><{$vo.html}></span><img src="__ROOT__<{$vo.ModuleImg}>" border="0" height="18" />
+            <td class="tl"><span style="color:#f9f9f9"><{$vo.html}></span><img src="<{$vo.ModuleImg}>" border="0" height="18" />
             <{$vo.ModuleName}></td>
             <td class="tc"><{$vo.classname}></td>
             <td><{$vo.ModuleUrl}></td>

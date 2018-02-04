@@ -114,8 +114,8 @@ class IndexAction extends Action {
 		//===模块导航开始===
 		if (!S('list')) {
 			$module = M('module');
-			$list=$module->where('Sid = 0')->order('Msort asc')->select();
-			$volist=$module->where('Sid > 0')->order('Msort asc')->select();
+			$list=$module->where('Sid = 0 and Status = 0')->order('Msort asc')->select();
+			$volist=$module->where('Sid > 0 and Status = 0')->order('Msort asc')->select();
 			S('list', $list, $configcache['DataCache']*3600);
 			S('volist', $volist, $configcache['DataCache']*3600);
 		}

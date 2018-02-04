@@ -238,7 +238,6 @@ class SystemAction extends CommonAction {
 			$data['Status'] = I('post.status','');
 			$data['Msort'] = I('post.msort','');
 			$data['Description'] = I('post.description','','htmlspecialchars');
-			
 			$module = D('Module');
 			if ($module->create($data)) {
 				$module->save();

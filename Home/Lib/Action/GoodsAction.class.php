@@ -88,6 +88,7 @@ class GoodsAction extends CommonAction {
 			echo json_encode($data);
 		}
 	}
+	/*
 	//打开或关闭共享请求
 	public function opensharedo() {
 		parent::userauth(72);
@@ -115,6 +116,7 @@ class GoodsAction extends CommonAction {
 		parent::userauth2(73);
 		$this->display();
 	}
+	
 	//共享数据请求
 	public function openshareajax() {
 		parent::userauth(73);
@@ -332,14 +334,16 @@ class GoodsAction extends CommonAction {
 		$this->assign('result',$result);
 		$this->display('opensharecontactdetail');
 	}
+	*/
 	//新增客户
 	public function goodsadd() {
-		parent::win_userauth(88);
+		parent::userauth2(88);
 		$dmenu=M('dmenu');
 		$volist=$dmenu->where('Sid <> 0')->order('Sortid asc')->select();
 		$this->assign('volist',$volist);
 		$this->display('goodsadd');
 	}
+	/*
 	//导入客户
 	public function goodsimport() {
 	    parent::win_userauth(66);
@@ -348,6 +352,7 @@ class GoodsAction extends CommonAction {
 	    $this->assign('volist',$volist);
 	    $this->display('goodsimport');
 	}
+	*/
 	//添加处理
 	public function goodsadd_do() {
 		//验证用户权限
@@ -381,6 +386,7 @@ class GoodsAction extends CommonAction {
 			$this->error('非法请求');
 		}
 	}
+	/*
 	//添加处理
 	public function goodsimport_do() {
 	    //验证用户权限
@@ -487,7 +493,7 @@ class GoodsAction extends CommonAction {
 	        $this->error('非法请求');
 	    }
 	}
-	
+	*/
 	
 	//修改订单信息
 	public function goodsedit() {
@@ -713,7 +719,7 @@ class GoodsAction extends CommonAction {
 	}
 	//窗口联系人管理
 	public function wincontact() {
-		parent::win_userauth(85);
+		parent::win_userauth2(85);
 		$Cid = I('get.Cid','');
 		if ($Cid=='' || !is_numeric($Cid)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -791,7 +797,7 @@ class GoodsAction extends CommonAction {
 	}
 	//新增联系人
 	public function contactadd() {
-		parent::win_userauth(69);
+		parent::userauth2(69);
 		$Cid = I('get.Cid','');
 		if ($Cid=='' || !is_numeric($Cid)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -842,7 +848,7 @@ class GoodsAction extends CommonAction {
 	}
 	//修改联系人信息
 	public function contactedit() {
-		parent::win_userauth(70);
+		parent::userauth2(70);
 		$id = I('get.id','');
 		if ($id=='' || !is_numeric($id)) {
 			parent::operating(__ACTION__,1,'参数错误');
@@ -900,7 +906,7 @@ class GoodsAction extends CommonAction {
 	}
 	//删除联系人到
 	public function contact_del() {
-		parent::userauth(71);
+		parent::userauth2(71);
 		//判断是否是ajax请求
 		if ($this->isAjax()) {
 			$id=I('post.id','');
@@ -933,7 +939,7 @@ class GoodsAction extends CommonAction {
 	//批量删除联系人
 	public function contact_indel() {
 		//验证用户权限
-		parent::userauth(71);
+		parent::userauth2(71);
 		if ($this->isAjax()) {
 			if (!$delid=explode(',',I('post.delid',''))) {
 				R('Public/errjson',array('请选中后再删除'));
@@ -1047,7 +1053,7 @@ class GoodsAction extends CommonAction {
 	}
 	//还原操作
 	public function reduction() {
-		parent::userauth(75);
+		parent::userauth2(75);
 		//判断是否是ajax请求
 		if ($this->isAjax()) {
 			$id=I('post.id','');
@@ -1077,7 +1083,7 @@ class GoodsAction extends CommonAction {
 	//批量还原
 	public function reduction_in() {
 		//验证用户权限
-		parent::userauth(75);
+		parent::userauth2(75);
 		if ($this->isAjax()) {
 			if (!$inid=explode(',',I('post.inid',''))) {
 				R('Public/errjson',array('请选中后再删除'));
@@ -1101,7 +1107,7 @@ class GoodsAction extends CommonAction {
 	//批量删除
 	public function goods_c_indel() {
 		//验证用户权限
-		parent::userauth(76);
+		parent::userauth2(76);
 		if ($this->isAjax()) {
 			if (!$delid=explode(',',I('post.delid',''))) {
 				R('Public/errjson',array('请选中后再删除'));

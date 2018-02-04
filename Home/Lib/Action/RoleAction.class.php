@@ -87,6 +87,7 @@ class RoleAction extends CommonAction {
 				//修改所有属于该角色的用户权限
 				$user = M('user');
 				$user->where('Roleid='.$data['ID'])->setField('Competence',$data['Competence']);
+				$_SESSION['ThinkUser']['Competence'] = $data['Competence'];
 				parent::operating(__ACTION__,0,'更新成功');
 				R('Public/errjson',array('ok'));
 			}else {
